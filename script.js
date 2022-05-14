@@ -7,7 +7,7 @@ cnv.height = 200;
 let cactusImg = document.getElementById("cactus");
 let dinosaurImg = document.getElementById("dinosaur");
 
-let cactusDisplayInterval = Math.round(Math.random() * 200);
+let cactusDisplayInterval = Math.round(Math.random() * 200) + 50;
 let cactusDisplayDuration = 0;
 let cacti = []
 let dinosaurY = 70
@@ -20,6 +20,7 @@ let highScore = 0
 let dinosaurX = 80
 let dinosaurW = 30
 let dinosaurH = 30
+let secretCode = []
 
 
 document.addEventListener("keydown", keydownListener)
@@ -33,7 +34,7 @@ class cactus {
     }
     display() {
         ctx.drawImage(cactusImg, this.x, this.y, this.w, this.h)
-        this.x -= 4
+        this.x -= 10
 
         if (dinosaurX + dinosaurW - 6 >= this.x && dinosaurX + dinosaurW - 6 <= this.x + 18 && dinosaurY + dinosaurH - 6 >= this.y && dinosaurY + dinosaurH - 6 <= this.y + 30) {
             death = true
@@ -44,6 +45,7 @@ class cactus {
 
 requestAnimationFrame(loop)
 function loop() { 
+    console.log(secretCode)
     if (!death) {
         console.log(dinosaurY)
         console.log(jumping)
@@ -63,7 +65,7 @@ function loop() {
         if (cactusDisplayDuration === cactusDisplayInterval) {
             cacti.push(new cactus(cnv.width, 70, 20, 30));
             cactusDisplayDuration = 0;
-            cactusDisplayInterval = Math.round(Math.random() * 200);
+            cactusDisplayInterval = Math.round(Math.random() * 200) + 50;
         }
         if (jumping === true) {
             dinosaurY = (0.5 * gravity * jumpTimer * jumpTimer - 6 * jumpTimer + 70)
@@ -72,7 +74,9 @@ function loop() {
                 jumping = false;
             }
         }
-
+        if (secretCode === ["control", "D", "A", "V", "I", "D"]) {
+            alert("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+        }
         for (let n = 0; n < cacti.length; n++) {
             cacti[n].display();
             if (cacti[n].x <= -20) {
@@ -82,17 +86,20 @@ function loop() {
 
     }
     else {
-        ctx.fillText("Press the space bar to restart game", 250, 180)
+        ctx.fillText("Press enter to restart game", 250, 180)
     }
     requestAnimationFrame(loop)
 }
 
 function keydownListener(event) {
+    console.log(event.code)
     if (event.code === "Space") {
         if (jumping === false) {
             jumping = true;
             jumpTimer = 0
         }
+    } else if (event.code === "Enter") {
+        console.log("EEE")
         if (death) {
             if (score > highScore) {
                 highScore = score;
@@ -101,6 +108,16 @@ function keydownListener(event) {
             cacti.splice(0, cacti.length)
             death = false;
         }
+    } else if (event.code === "MetaLeft") {
+        secretCode = ["control"]
+    } else if (event.code === "KeyD") {
+        secretCode.push("D")
+    } else if (event.code === "KeyA") {
+        secretCode.push("A")
+    } else if (event.code === "KeyV") {
+        secretCode.push("V")
+    } else if (event.code === "KeyI") {
+        secretCode.push("I")
     }
 }
 
