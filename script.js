@@ -20,7 +20,6 @@ let highScore = 0
 let dinosaurX = 80
 let dinosaurW = 30
 let dinosaurH = 30
-let secretCode = []
 
 
 document.addEventListener("keydown", keydownListener)
@@ -45,21 +44,14 @@ class cactus {
 
 requestAnimationFrame(loop)
 function loop() { 
-    console.log(secretCode)
+ 
     if (!death) {
-        console.log(dinosaurY)
-        console.log(jumping)
         ctx.fillStyle = "rgb(255, 255, 255)"
         ctx.fillRect(0, 0, cnv.width, cnv.height)
         ctx.font = "20px Sabo"
         ctx.fillStyle = "rgb(0, 0, 0)"
         ctx.fillText("Score: " + score, 600, 20)
         ctx.fillText("High Score: " + highScore, 400, 20)
-        if(jumping === true) {
-            jumpTimer += 0.7
-        }
-        console.log(jumpTimer)
-        console.log(jumping)
         ctx.drawImage(dinosaurImg, dinosaurX, dinosaurY, dinosaurW, dinosaurH)
         cactusDisplayDuration ++;
         if (cactusDisplayDuration === cactusDisplayInterval) {
@@ -68,14 +60,12 @@ function loop() {
             cactusDisplayInterval = Math.round(Math.random() * 200) + 50;
         }
         if (jumping === true) {
+            jumpTimer += 0.7
             dinosaurY = (0.5 * gravity * jumpTimer * jumpTimer - 6 * jumpTimer + 70)
             if (dinosaurY > 70) {
                 dinosaurY = 70
                 jumping = false;
             }
-        }
-        if (secretCode === ["control", "D", "A", "V", "I", "D"]) {
-            alert("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
         }
         for (let n = 0; n < cacti.length; n++) {
             cacti[n].display();
@@ -92,14 +82,12 @@ function loop() {
 }
 
 function keydownListener(event) {
-    console.log(event.code)
     if (event.code === "Space") {
-        if (jumping === false) {
+        if (!jumping) {
             jumping = true;
             jumpTimer = 0
         }
     } else if (event.code === "Enter") {
-        console.log("EEE")
         if (death) {
             if (score > highScore) {
                 highScore = score;
@@ -107,17 +95,9 @@ function keydownListener(event) {
             score = 0
             cacti.splice(0, cacti.length)
             death = false;
+            dinosaurY = 70
+            jumping = false
         }
-    } else if (event.code === "MetaLeft") {
-        secretCode = ["control"]
-    } else if (event.code === "KeyD") {
-        secretCode.push("D")
-    } else if (event.code === "KeyA") {
-        secretCode.push("A")
-    } else if (event.code === "KeyV") {
-        secretCode.push("V")
-    } else if (event.code === "KeyI") {
-        secretCode.push("I")
     }
 }
 
@@ -125,7 +105,7 @@ function Gamescore() {
     if (!death) {
         score++
         if (!jumping) {
-            if (dinosaurImg.src === "http://127.0.0.1:5500/img/dino1.png") {
+            if (dinosaurImg.src === "http://127.0.0.1:5501/img/dino1.png") {
                 dinosaurImg.src = "img/dino2.png"
             } else {
                 dinosaurImg.src = "img/dino1.png"
