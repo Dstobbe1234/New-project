@@ -20,6 +20,7 @@ let highScore = 0
 let dinosaurX = 80
 let dinosaurW = 30
 let dinosaurH = 30
+let speed = 5
 
 
 document.addEventListener("keydown", keydownListener)
@@ -33,9 +34,11 @@ class cactus {
     }
     display() {
         ctx.drawImage(cactusImg, this.x, this.y, this.w, this.h)
-        this.x -= 10
+        this.x -= speed
 
         if (dinosaurX + dinosaurW - 6 >= this.x && dinosaurX + dinosaurW - 6 <= this.x + 18 && dinosaurY + dinosaurH - 6 >= this.y && dinosaurY + dinosaurH - 6 <= this.y + 30) {
+            death = true
+        } else if (dinosaurX >= this.x && dinosaurX <= this.x + 18 && dinosaurY+ dinosaurH - 6 >= this.y && dinosaurY + dinosaurH - 6 <= this.y + 30) {
             death = true
         }
     }
@@ -44,10 +47,12 @@ class cactus {
 
 requestAnimationFrame(loop)
 function loop() { 
- 
+    ctx.fillStyle = "rgb(209, 237, 242)"
+    ctx.fillRect(0, 0, cnv.width, cnv.height)
+    ctx.fillStyle = "rgb(255, 211, 25)"
+    ctx.fillRect(0, cnv.height / 2, cnv.width, cnv.height)
     if (!death) {
-        ctx.fillStyle = "rgb(255, 255, 255)"
-        ctx.fillRect(0, 0, cnv.width, cnv.height)
+        speed+= 0.001
         ctx.font = "20px Sabo"
         ctx.fillStyle = "rgb(0, 0, 0)"
         ctx.fillText("Score: " + score, 600, 20)
@@ -76,7 +81,8 @@ function loop() {
 
     }
     else {
-        ctx.fillText("Press enter to restart game", 250, 180)
+        ctx.fillStyle = "rgb(0, 0, 0)"
+        ctx.fillText("Press enter to restart game", 250, 135)
     }
     requestAnimationFrame(loop)
 }
@@ -96,6 +102,7 @@ function keydownListener(event) {
             cacti.splice(0, cacti.length)
             death = false;
             dinosaurY = 70
+            speed = 5
             jumping = false
         }
     }
